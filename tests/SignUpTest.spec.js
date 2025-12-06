@@ -1,17 +1,18 @@
 const{test,expect} = require('@playwright/test');
 import{homePage} from '../pages/homePage';
-import { signUpPage } from '../pages/signUpPage'; 
+import { signUpPage } from '../pages/signUpPage';
+import { myAccountPage } from '../pages/myAccountPage'; 
 let page;
-let userEmail = "testab@abcd.com";
+let userEmail = "testuser@phar.com";
 let userGender = "female";
 let userFirstName = "Rohit";
 let userLastName = "Srivastava";
 let userPassword = "abcd1234"
-let userBirthDay = "12-3-1999"
+let userBirthDay = "12/3/1999"
 let newsLetterCheck ='Y'
 let offersCheck = 'N'
 
-test.beforeEach(async ({browser}) => {
+test.beforeAll(async ({browser}) => {
     page = await browser.newPage();
     const home = new homePage(page);
     await home.openURL();
@@ -69,5 +70,16 @@ test('Invalid DOB', async () => {
     await register.selectBirthDate("12/10/")
     await register.submitRegistration()
     await register.checkError(["firstname is required.","Invalid date of birth"])
-    await page.waitForTimeout(5000);
-});
+})
+
+test('Submit Sign up Form', async() =>{
+    const register = new signUpPage(page);
+    await register.selectGender(userGender);
+    await register.fillForm({firstname:userFirstName, lastname: userLastName, password: userPassword, email: userEmail})
+    await register.selectBirthDate(userBirthDay);
+    await register.checkboxes({newsletter: newsLetterCheck, offers: offersCheck})
+    await register.submitRegistration();
+    const accountPage = new myAccountPage(page);
+    await accountPage.verifySignUp();
+    
+})

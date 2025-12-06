@@ -2,6 +2,8 @@ const{ expect} =require('@playwright/test');
 exports.signUpPage = class signUpPage{
     constructor(page){
         this.page =page;
+        this.emailInput = '//input[@id="email_create"]';
+        this.createAccountButton = '//button[@id="SubmitCreate"]';
         this.mrRadioButton = '//input[@type = "radio" and @id="id_gender1"]';
         this.mrsRadioButton = '//input[@type = "radio" and @id="id_gender2"]'
         this.firstName ='//input[@id="customer_firstname"]';
