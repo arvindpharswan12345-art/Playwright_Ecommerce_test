@@ -104,7 +104,7 @@ exports.signUpPage = class signUpPage{
     }
 
     async checkError(expectederror){
-        const error = this.page.locator(this.errorMessage);
+        const error = this.page.locator(this.errorMessage).first();
         const errorList = this.page.locator(this.errorList);
         
         const errorText = 

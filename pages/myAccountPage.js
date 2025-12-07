@@ -21,7 +21,7 @@ exports.myAccountPage = class myAccountPage{
         this.errorList ='//div[@class="alert alert-danger"]//li'
     }
     
-    async verifySignUp(){
+    async verifySignIn(){
         const pageHeading = this.page.locator(this.pageHeading);
         await expect(pageHeading).toContainText("My account");
     }

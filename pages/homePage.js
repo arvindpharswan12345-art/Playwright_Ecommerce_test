@@ -4,6 +4,9 @@ exports.homePage = class homePage{
         this.signInButton = '//a[@class="login"]';
         this.emailInput = '//input[@id="email_create"]';
         this.createAccountButton = '//button[@id="SubmitCreate"]';
+        this.userEmail = '//input[@id="email"]';
+        this.userPassword = '//input[@id="passwd"]';
+        this.submitLogin ='//button[@id="SubmitLogin"]';
     }
     async openURL(){
         await this.page.goto('http://www.automationpractice.pl/index.php');
@@ -12,5 +15,12 @@ exports.homePage = class homePage{
         await this.page.click(this.signInButton);
         await this.page.fill(this.emailInput,email);
         await this.page.click(this.createAccountButton);
+    }
+
+    async userLogin(email, password){
+        await this.page.click(this.signInButton);
+        await this.page.locator(this.userEmail).fill(email);
+        await this.page.locator(this.userPassword).fill(password);
+        await this.page.click(this.submitLogin);
     }
 }
