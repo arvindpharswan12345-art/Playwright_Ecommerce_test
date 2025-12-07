@@ -19,10 +19,15 @@ exports.myAccountPage = class myAccountPage{
         this.registerButton ='//button[@id="submitAccount"]';
         this.errorMessage ='//div[@class="alert alert-danger"]'
         this.errorList ='//div[@class="alert alert-danger"]//li'
+        this.logout ='//a[@class="logout"]'
     }
     
     async verifySignIn(){
         const pageHeading = this.page.locator(this.pageHeading);
         await expect(pageHeading).toContainText("My account");
+    }
+
+    async userLogout(){
+        await this.page.locator(this.logout).click();
     }
 }

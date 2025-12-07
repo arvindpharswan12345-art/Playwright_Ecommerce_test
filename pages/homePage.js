@@ -1,3 +1,4 @@
+const{expect} = require('@playwright/test');
 exports.homePage = class homePage{
     constructor(page){
         this.page = page;
@@ -7,6 +8,7 @@ exports.homePage = class homePage{
         this.userEmail = '//input[@id="email"]';
         this.userPassword = '//input[@id="passwd"]';
         this.submitLogin ='//button[@id="SubmitLogin"]';
+        this.authenticationPage = '//h1[@class="page-heading" and normalize-space() ="Authentication"]';
     }
     async openURL(){
         await this.page.goto('http://www.automationpractice.pl/index.php');
@@ -22,5 +24,10 @@ exports.homePage = class homePage{
         await this.page.locator(this.userEmail).fill(email);
         await this.page.locator(this.userPassword).fill(password);
         await this.page.click(this.submitLogin);
+    }
+
+    async verifyLogout(){
+        const pageHeading = this.page.locator(this.authenticationPage);
+        await expect(pageHeading).toContainText("Authentication");
     }
 }

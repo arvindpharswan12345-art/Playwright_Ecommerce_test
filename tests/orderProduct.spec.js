@@ -12,7 +12,7 @@ let userBirthDay = "29/3/1996"
 let newsLetterCheck ='Y'
 let offersCheck = 'N'
 
-test.beforeEach(async ({browser}) => {
+test.beforeAll(async ({browser}) => {
     page = await browser.newPage();
     const home = new homePage(page);
     await home.openURL();
@@ -38,11 +38,21 @@ test('TC-002: Login With Valid Credentials', async()=>{
     await accountPage.verifySignIn();
 })
 
-test('TC-003: Login With Invalid Credentials', async()=>{
+test('TC-003: Logout', async()=>{
+    const accountPage = new myAccountPage(page);
+    await accountPage.userLogout();
+    const home = new homePage(page);
+    await home.verifyLogout();
+})
+
+test('TC-004: Login With Invalid Credentials', async()=>{
     const home = new homePage(page);
     await home.userLogin(userEmail, "abcd123");
     const authenticationError = new signUpPage(page);
     await authenticationError.checkError(["Authentication failed."]);
 })
+
+
+
 
 

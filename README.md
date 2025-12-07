@@ -2,7 +2,7 @@
 
 
 
-!\[Playwright Tests](https://github.com/YOUR-USERNAME/playwright-ecommerce-tests/actions/workflows/playwright.yml/badge.svg)
+!\[Playwright Tests](https://github.com/arvindpharswan12345-art/playwright-ecommerce-tests/actions/workflows/playwright.yml/badge.svg)
 
 
 
