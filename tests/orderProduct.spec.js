@@ -80,6 +80,17 @@ test('TC-007: Filter Product Size and Color In Stock', async()=>{
     await details.filterProduct();
 })
 
+test('TC-008: Add Product to Cart', async()=>{
+    const home = new homePage(page);
+    const details = new productPage(page);
+    await home.userLogin(userEmail, userPassword);
+    await home.searchProduct(searchProduct);
+    await home.openProduct(selectProduct);
+    await details.filterProduct();
+    await details.addProductToCart(selectProduct);
+    await page.waitForTimeout(2000)
+})
+
 
 
 

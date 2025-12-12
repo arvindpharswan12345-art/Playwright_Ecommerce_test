@@ -8,6 +8,11 @@ exports.productPage = class productPage{
         this.productAvailability = '//span[@id="availability_value"]'
         this.sizeDropdown = '//select[@id="group_1"]'
         this.availableColors ='//ul[@id="color_to_pick_list"]/li/a'
+        this.addToCartButton ='//span[normalize-space()="Add to cart"]'
+        this.cartPopup = '//div[@id="layer_cart"]'
+        this.cartMessages ='//div[@class="clearfix"]//h2'
+        this.cartImage ='//img[@class="layer_cart_img img-responsive"]'
+        this.cartProduct = '//span[@id="layer_cart_product_title"]'
     }
 
     async verifyProductDetails(productName){
@@ -51,4 +56,15 @@ exports.productPage = class productPage{
 
     }
 
+    async addProductToCart(product){
+        const cart = this.page.locator(this.cartPopup);
+        const cartHeadings = this.page.locator(this.cartMessages);
+        const productImage = this.page.locator(this.cartImage);
+        const productName =this.page.locator(this.cartProduct);
+        await this.page.click(this.addToCartButton);
+        await expect.soft(cart).toBeVisible();
+        await expect.soft(cartHeadings.first()).toContainText('Product successfully added to your shopping cart');
+        await expect.soft(productImage).toHaveAttribute('title', product);
+        await expect.soft(productName).toContainText(product);
+    }
 }
