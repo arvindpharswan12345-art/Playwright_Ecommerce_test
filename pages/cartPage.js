@@ -15,6 +15,7 @@ exports.cartPage =class cartPage{
         this.shippingPrice = '//td[@id="total_shipping"]';
         this.totalCartPrice ='//span[@id="total_price"]';
         this.productName = '//td/p[@class="product-name"]/a';
+        this.emptyCart ='//p[@class="alert alert-warning"]';
     }
 
     async openCart(){
@@ -62,6 +63,41 @@ exports.cartPage =class cartPage{
         const FinalPrice = await this.getPrice(requiredRow, this.totalItemPrice);
         const finalPriceCheck = await this.priceCalculation(updatedQuantity, unitProductPrice, FinalPrice);
         await expect.soft(finalPriceCheck).toBeTruthy();
+    }
+
+    async removeProduct(product){
+        const productRow = this.page.locator(this.cartRow);
+        const emptyCartText = this.page.locator(this.emptyCart);
+        const requiredRow = productRow.filter({
+            has: this.page.locator('td'),
+            hasText: product
+        })
+        await requiredRow.locator(this.deleteItem).click();
+        await expect.soft(requiredRow).not.toBeVisible();
+        if(await productRow.count()== 0){
+            await expect.soft(emptyCartText).toHaveText("Your shopping cart is empty.");
+        }
+    }
+
+    async verifyPriceCalculation(){
+        const productRow = this.page.locator(this.cartRow);
+        await productRow.first().waitFor({ state: 'visible' });
+        const productCount = await productRow.count();
+        //console.log('productcount',productCount)
+        let addProductPrice = null
+        for(let i=0; i<productCount ;i++){
+            let ithPrice = await this.getPrice(productRow.nth(i), this.totalItemPrice);
+            //console.log(`${i}product price: ${ithPrice}`)
+            addProductPrice += ithPrice; 
+        }
+        addProductPrice = Number(addProductPrice.toFixed(2));
+        const allProductPrice = await this.getPrice(this.page, this.totalProductPrice);
+        const shipping = await this.getPrice(this.page, this.shippingPrice);
+        const totalCart = await this.getPrice(this.page, this.totalCartPrice);
+        const totalCartValueCalculated = shipping + addProductPrice;
+        //console.log(`addProductPrice=${addProductPrice}, allProductPrice=${allProductPrice}, shipping=${shipping}, totalCart=${totalCart}, totalCartValueCalculated=${totalCartValueCalculated}`)
+        expect.soft(allProductPrice).toBe(addProductPrice);
+        expect.soft(totalCart).toBe(totalCartValueCalculated);
     }
 
 

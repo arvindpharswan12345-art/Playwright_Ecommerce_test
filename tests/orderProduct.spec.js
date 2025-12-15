@@ -14,7 +14,9 @@ let userBirthDay = "29/3/1996"
 let newsLetterCheck ='Y'
 let offersCheck = 'N'
 let searchProduct = "Dress"
-let selectProduct = "Printed Chiffon Dress"
+let firstProduct = "Printed Chiffon Dress"
+let secondProduct = "Printed Summer Dress"
+
 
 test.beforeEach(async ({browser}) => {
     page = await browser.newPage();
@@ -67,9 +69,9 @@ test('TC-006: View Product Details', async()=>{
     const home = new homePage(page);
     await home.userLogin(userEmail, userPassword);
     await home.searchProduct(searchProduct);
-    await home.openProduct(selectProduct);
+    await home.openProduct(firstProduct);
     const details = new productPage(page);
-    await details.verifyProductDetails(selectProduct);
+    await details.verifyProductDetails(firstProduct);
 })
 
 test('TC-007: Filter Product Size and Color In Stock', async()=>{
@@ -77,7 +79,7 @@ test('TC-007: Filter Product Size and Color In Stock', async()=>{
     const details = new productPage(page);
     await home.userLogin(userEmail, userPassword);
     await home.searchProduct(searchProduct);
-    await home.openProduct(selectProduct);
+    await home.openProduct(firstProduct);
     await details.filterProduct();
 })
 
@@ -86,9 +88,9 @@ test('TC-008: Add Product to Cart', async()=>{
     const details = new productPage(page);
     await home.userLogin(userEmail, userPassword);
     await home.searchProduct(searchProduct);
-    await home.openProduct(selectProduct);
+    await home.openProduct(firstProduct);
     await details.filterProduct();
-    await details.addProductToCart(selectProduct);
+    await details.addProductToCart(firstProduct);
 })
 
 test('TC-009: Increase Product Quantity in Cart', async()=>{
@@ -97,12 +99,47 @@ test('TC-009: Increase Product Quantity in Cart', async()=>{
     const cart = new cartPage(page);
     await home.userLogin(userEmail, userPassword);
     await home.searchProduct(searchProduct);
-    await home.openProduct(selectProduct);
+    await home.openProduct(firstProduct);
     await details.filterProduct();
-    await details.addProductToCart(selectProduct);
+    await details.addProductToCart(firstProduct);
     await cart.openCart();
-    await cart.increaseProductQuantity(selectProduct);
+    await cart.increaseProductQuantity(firstProduct);
 })
+
+test('TC-010: Remove Product From Cart', async()=>{
+    const home = new homePage(page);
+    const details = new productPage(page);
+    const cart = new cartPage(page);
+    await home.userLogin(userEmail, userPassword);
+    await home.searchProduct(searchProduct);
+    await home.openProduct(firstProduct);
+    await details.filterProduct();
+    await details.addProductToCart(firstProduct);
+    await cart.openCart();
+    await cart.removeProduct(firstProduct);
+})
+
+test('TC-011: Verify Product Price Calculation', async()=>{
+    const home = new homePage(page);
+    const details = new productPage(page);
+    const cart = new cartPage(page);
+    await home.userLogin(userEmail, userPassword);
+    await home.searchProduct(searchProduct);
+    await home.openProduct(firstProduct);
+    await details.filterProduct();
+    await details.addProductToCart(firstProduct);
+    await home.searchProduct(searchProduct);
+    await home.openProduct(secondProduct);
+    await details.filterProduct();
+    await details.addProductToCart(secondProduct);
+    await cart.openCart();
+    await cart.verifyPriceCalculation();
+})
+
+
+
+
+
 
 
 
